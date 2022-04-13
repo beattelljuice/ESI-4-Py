@@ -9,11 +9,11 @@ def example():
 
     input(" - Press Enter To Start - ")
     print("Lets Define Some Variables:")
-    ClientID = "67e1a40c3d164ba38df4c709e7ab3e74"
-    SecretKey = "5fRcMyAESdLEL8reEry7HXtRlcNfRxfh6XvzCfKC"
-    CallbackURL = "http://localhost:8000/callback"
-    Scopes = "esi-planets.manage_planets.v1"
-    ValidationState = "fill"
+    ClientID = ""
+    SecretKey = ""
+    CallbackURL = ""
+    Scopes = ""
+    ValidationState = ""
     print("Variables Defined")
 
     # Define the base object
