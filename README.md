@@ -1,2 +1,4 @@
 # ESI-4-Py
-ESI Interfacing Code for python Applications
+ESI Interfacing Obeject for python Applications
+
+Desktop Addon function still a WIP
