@@ -214,19 +214,73 @@ class esiobject_base:
         isvalid = (remaining_time>datetime.timedelta(seconds=0))
         return isvalid
 
+    def universe_types_TYPEID(self,ID):
+        req = request.Request("https://esi.evetech.net/latest/universe/types/"+str(ID)+"/?datasource=tranquility&language=en")
+        resp = request.urlopen(req)
+        # Decode and store incoming data parsed into a dictionary from json
+        result = resp.read().decode('utf-8')
+        result = json.loads(result)
+        return result
 
-# Desktop addon for desktop apps
-class esi_desktopapp_addon:
+class esiobject_base_noauth:
     def __init__(self):
-        print("This Addon is not finished")
-        return
+        pass
+    def universe_types_TYPEID(ID):
+        req = request.Request("https://esi.evetech.net/latest/universe/types/"+str(ID)+"/?datasource=tranquility&language=en")
+        resp = request.urlopen(req)
+        # Decode and store incoming data parsed into a dictionary from json
+        result = resp.read().decode('utf-8')
+        result = json.loads(result)
+        return result
+    def universe_groups_GROUPID(groupID):
+        req = request.Request("https://esi.evetech.net/latest/universe/groups/"+str(groupID)+"/?datasource=tranquility&language=en")
+        resp = request.urlopen(req)
+        # Decode and store incoming data parsed into a dictionary from json
+        result = resp.read().decode('utf-8')
+        result = json.loads(result)
+        return result
+    
+    def bulk_names_to_ids(name_list = []):
+        payload = json.dumps(name_list)
+        #print(payload)
+        req = request.Request("https://esi.evetech.net/latest/universe/ids/?datasource=tranquility&language=en",data=payload.encode("ASCII"))
+        resp = request.urlopen(req)
+        result = resp.read().decode('utf-8')
+        result = json.loads(result)
+        try:
+            result = result['characters']
+        except KeyError:
+            result = [{'id':0,'name':''}]
+        toreturn = {}
+        #print(result)
+        for i in result:
+            #print(i['name'])
+            #print(i['id'])
+            toreturn[i['id']] = i['name']
+        return toreturn
+    
+    def bulk_ids_to_names(id_list=[]):
+        payload = json.dumps(id_list)
+        #print(payload)
+        req = request.Request("https://esi.evetech.net/latest/universe/names/?datasource=tranquility",data=payload.encode("ASCII"))
+        resp = request.urlopen(req)
+        result = resp.read().decode('utf-8')
+        result = json.loads(result)
+        return result
 
-
-
-
-
-
-
-
-
-
+    def bulk_ids_to_affiliations(ids = []):
+        #print(ids[0])
+        if (int(ids[0]) == 0):
+            #print("Invalid Char ID")
+            return [{'alliance_id': None, 'character_id': None, 'corporation_id': None}]
+        else:
+            #print("---")
+            payload = json.dumps(ids)
+            # print(payload)
+            req = request.Request("https://esi.evetech.net/latest/characters/affiliation/?datasource=tranquility",
+                                  data=payload.encode("ASCII"))
+            resp = request.urlopen(req)
+            result = resp.read().decode('utf-8')
+            result = json.loads(result)
+            #print(result)
+            return result
